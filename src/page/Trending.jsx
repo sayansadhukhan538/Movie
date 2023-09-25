@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { networkCall } from "../service/api.service";
-import Card from "../components/Card";
+import MaterialUICard from "../components/Card";
 
 
 
@@ -24,7 +24,7 @@ const Trending = () => {
     <div className="grid">{data && data.map((element)=>{
         console.log(data)
         return(
-            <Card
+            <MaterialUICard
             key={element.id}
               id={element.id}
               poster={element.poster_path||element.backdrop_path}

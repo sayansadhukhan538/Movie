@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { networkCall } from "../service/api.service";
-import Card from "../components/Card";
+import MaterialUICard from "../components/Card";
+import Genres from "../components/Genres";
 
 
 const Movies = () => {
     const [data, setData] = useState([]);
+    const[selectGenres, setSelectGenres] = useState([]);
+    const[genres, setGenres] = useState([]);
     async function fetchTrending(value){
         const output = await networkCall(value)
         if(output.isSuccess){
@@ -21,10 +24,17 @@ const Movies = () => {
   return (<>
 
     <h2 className="heading">Movie</h2>
-    <div className="grid">{data && data.map((element)=>{
+    <Genres
+    selectGenres={selectGenres}
+    setSelectGenres={setSelectGenres}
+    genres={genres}
+    setGenres={setGenres}
+    
+    />
+    <div className="grid movie" >{data && data.map((element)=>{
         console.log(data)
         return(
-            <Card
+            <MaterialUICard
             key={element.id}
               id={element.id}
               poster={element.poster_path||element.backdrop_path}

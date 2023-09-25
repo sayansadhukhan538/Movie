@@ -6,6 +6,7 @@ import Header from './components/Header'
 import Trending from './page/Trending'
 import Movies from './page/Movies'
 import Tvseries from './page/TvSeries'
+import Search from './page/Search'
 
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route exact path='/' element={<Trending/>}/>
         <Route path='/movie' element={<Movies/>}/>
         <Route path='/tv' element={<Tvseries/>}/>
+        <Route path='/search' element={<Search/>}/>
       </Routes>
       </div>
       <div className='footer'>
