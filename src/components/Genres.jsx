@@ -1,61 +1,53 @@
 /* eslint-disable react/prop-types */
 
 import { Chip } from "@mui/material";
-import axios from "axios"
 import { useEffect } from "react";
+import { fetchGenres } from "../service/api.service";
 
 
-const Genres = ({setGenres,genres,setSelectGenres, selectGenres}) => {
-    const headers = {
-        'accept': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMmNlYjhlMDVmMjBkYzY5MWY2ZGFjYmRkYTQ0YTZhMyIsInN1YiI6IjY0ZGExYjk5MzcxMDk3MDEzOTQ1YzYxMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-ixf4X1OkJYHfq3xyyhxSV5CHBXQnVNxCvDivSo22NA'
-      
-    };
-    async function fetchGenres(){
-        const {data} =await axios.get('https://api.themoviedb.org/3/genre/movie/list?language=en', { headers })
-        
-        setGenres(data.genres)
+const Genres = ({setGenres,genres,setSelectGenres, selectGenres, value}) => {
+    
+  async function getGenre(params){
+    const data = await fetchGenres(params);
+    if(data.isSuccess){
+      setGenres(data.data)
     }
-    function handleAdd(genre){
-        setSelectGenres([...selectGenres,genre]);
-        setGenres(genres.filter((g)=>g.id!==genre.id));
-    }
-    function handleRemove(genre){
-        setSelectGenres(selectGenres.filter((g)=>g.id!==genre.id));
-        setGenres([...genres,genre]);
-    }
+  }
+    
     console.log(genres)
+    console.log(selectGenres)
+    
     useEffect(()=>{
-    fetchGenres()
+    getGenre(value)
     },[])
   return (
     <div style={{
         margin:'123px 0px'
-    }}>{selectGenres && selectGenres.map((genre)=>{
-        return(
-            <Chip key={genre.id} label={genre.name} style={{
-                margin:'2px',
-                color:'black',
-                backgroundColor:'white'
-            }}
-            size="small"
-            clickable
-            variant="outlined"
-            color="primary"
-            onDelete={()=>handleRemove(genre)}
-            />
-        )
-    })}
+    }}>
         {genres && genres.map((genre)=>{
+            // function btn(){
+            //   if(selectGenres.includes(genre.id)){
+            //     setSelectGenres((prev)=>prev.filter((g)=>g!==genre.id))
+            //   }
+            //   else{
+            //     setSelectGenres((prev)=>[...prev, genre.id])
+            //   }
+            // }
             return(
                 <Chip key={genre.id} label={genre.name} style={{
                     margin:'2px',
                     color:'black',
-                    backgroundColor:'white'
+                    backgroundColor: !selectGenres.includes(genre.id) ? 'primary': 'secondary',
                 }}
                 size="small"
                 clickable
-                onClick={()=>handleAdd(genre)}
+                color={selectGenres===genre?'default':'secondary'}
+
+                onClick={() =>!selectGenres.includes(genre.id) && setSelectGenres((prev) => [...prev, genre.id])}
+                onDelete={()=>selectGenres.includes(genre.id)&& setSelectGenres((prev) => prev.filter((g) => g !== genre.id))}  
+                
+                // {selectGenres.includes(genre.id) ? (onDelete={() => setSelectGenres((prev) => prev.filter((g) => g !== genre.id))}) : (onClick={() => setSelectGenres((prev) => [...prev, genre.id])})}
+
                 />
             )
         })}

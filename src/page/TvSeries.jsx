@@ -1,26 +1,37 @@
 import { useEffect, useState } from "react";
-import { networkCall } from "../service/api.service";
+import { fetchTv } from "../service/api.service";
 import MaterialUICard from "../components/Card";
+import useGenres from "../hooks/useGenres";
+import Genres from "../components/Genres";
 
 
 const Tvseries = () => {
     const [data, setData] = useState([]);
-    async function fetchTrending(value){
-        const output = await networkCall(value)
+    const[selectGenres, setSelectGenres] = useState([]);
+    const[genres, setGenres] = useState([]);
+    const genreURL = useGenres(selectGenres);
+
+    async function fetchSeries(value){
+        const output = await fetchTv(value)
         if(output.isSuccess){
             setData(output.data.results);
             console.log(data)
         }
 
     }
-    const type = 'tv';
     useEffect(()=>{
-        fetchTrending(type);
-        
-    },[])
+        fetchSeries(genreURL);  
+    },[genreURL])
   return (<>
 
     <h2 className="heading">TV Series</h2>
+    <Genres
+    selectGenres={selectGenres}
+    setSelectGenres={setSelectGenres}
+    genres={genres}
+    setGenres={setGenres}
+    value={'tv'}
+    />
     <div className="grid">{data && data.map((element)=>{
         console.log(data)
         return(
