@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchMovie } from "../service/api.service";
+import { fetchMovie, filterMovie } from "../service/api.service";
 import MaterialUICard from "../components/Card";
 import Genres from "../components/Genres";
 import useGenres from "../hooks/useGenres";
@@ -11,18 +12,28 @@ const Movies = () => {
     const[genres, setGenres] = useState([]);
     const genreURL = useGenres(selectGenres);
 
-    async function fetchFun(value){
-        const output = await fetchMovie(value)
+    async function getMovie(){
+        const output = await fetchMovie()
+        if(output.isSuccess){
+            setData(output.data.results);
+            console.log(data)
+        }
+    }
+    async function getFiltered(){
+      const output = await filterMovie(genreURL)
         if(output.isSuccess){
             setData(output.data.results);
             console.log(data)
         }
     }
     useEffect(()=>{
-        fetchFun(genreURL);
-        
+        if(selectGenres<1){
+          getMovie();
+        }else{
+          getFiltered();
+        } 
     },[genreURL])
-    const type = 'movie'
+    
   return (<>
 
     <h2 className="heading">Movie</h2>
@@ -31,7 +42,7 @@ const Movies = () => {
     setSelectGenres={setSelectGenres}
     genres={genres}
     setGenres={setGenres}
-    value={type}
+    value={'movie'}
     
     />
     <div className="grid movie" >{data && data.map((element)=>{
@@ -46,8 +57,8 @@ const Movies = () => {
               media_type={element.media_type}
               vote_average={element.vote_average}
             />
-        )
-    })}
+          )
+        })}
     </div>
     </>
   )

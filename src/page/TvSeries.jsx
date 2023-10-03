@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchTv } from "../service/api.service";
+import { fetchTv, filterTv } from "../service/api.service";
 import MaterialUICard from "../components/Card";
 import useGenres from "../hooks/useGenres";
 import Genres from "../components/Genres";
@@ -11,16 +12,26 @@ const Tvseries = () => {
     const[genres, setGenres] = useState([]);
     const genreURL = useGenres(selectGenres);
 
-    async function fetchSeries(value){
-        const output = await fetchTv(value)
+    async function fetchSeries(){
+        const output = await fetchTv()
         if(output.isSuccess){
             setData(output.data.results);
             console.log(data)
         }
-
+    }
+    async function filterSeries(){
+      const output = await filterTv(genreURL)
+        if(output.isSuccess){
+            setData(output.data.results);
+            console.log(data)
+        }
     }
     useEffect(()=>{
-        fetchSeries(genreURL);  
+         if(selectGenres<1){
+          fetchSeries();
+         }else{
+          filterSeries();
+         }
     },[genreURL])
   return (<>
 

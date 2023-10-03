@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import { Button, Input, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MaterialUICard from '../components/Card';
 import { fetchSearch } from '../service/api.service';
 const Search = () => {
@@ -17,6 +18,9 @@ const Search = () => {
         setOutput(data.data)
       }
     }
+    useEffect(()=>{
+      getSearchsults();
+    },[ type])
   return (
     <div style={{
       margin:'123px 0px'

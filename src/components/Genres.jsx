@@ -43,8 +43,9 @@ const Genres = ({setGenres,genres,setSelectGenres, selectGenres, value}) => {
                 clickable
                 color={selectGenres===genre?'default':'secondary'}
 
-                onClick={() =>!selectGenres.includes(genre.id) && setSelectGenres((prev) => [...prev, genre.id])}
-                onDelete={()=>selectGenres.includes(genre.id)&& setSelectGenres((prev) => prev.filter((g) => g !== genre.id))}  
+                onClick={!selectGenres.includes(genre.id) ? ()=> setSelectGenres((prev) => [...prev, genre.id]):null}
+
+                onDelete={selectGenres.includes(genre.id)? ()=>setSelectGenres((prev) => prev.filter((g) => g !== genre.id)):null}  
                 
                 // {selectGenres.includes(genre.id) ? (onDelete={() => setSelectGenres((prev) => prev.filter((g) => g !== genre.id))}) : (onClick={() => setSelectGenres((prev) => [...prev, genre.id])})}
 
