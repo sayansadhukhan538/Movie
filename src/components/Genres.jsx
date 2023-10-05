@@ -1,25 +1,21 @@
 /* eslint-disable react/prop-types */
 
 import { Chip } from "@mui/material";
-import { useEffect } from "react";
-import { fetchGenres } from "../service/api.service";
 
 
-const Genres = ({setGenres,genres,setSelectGenres, selectGenres, value}) => {
+
+
+const Genres = ({genres,setSelectGenres, selectGenres}) => {
     
-  async function getGenre(params){
-    const data = await fetchGenres(params);
-    if(data.isSuccess){
-      setGenres(data.data)
-    }
-  }
+  
     
-    console.log(genres)
-    console.log(selectGenres)
+  
+  // useEffect(()=>{
+  //     console.log(genres)
+  //     console.log('hi')
+  //     console.log("selected genres"+selectGenres)
     
-    useEffect(()=>{
-    getGenre(value)
-    },[])
+  //   },[selectGenres])
   return (
     <div style={{
         margin:'123px 0px'
@@ -36,12 +32,12 @@ const Genres = ({setGenres,genres,setSelectGenres, selectGenres, value}) => {
             return(
                 <Chip key={genre.id} label={genre.name} style={{
                     margin:'2px',
-                    color:'black',
-                    backgroundColor: !selectGenres.includes(genre.id) ? 'primary': 'secondary',
+                    color:'white',
+                    backgroundColor: selectGenres.includes(genre.id)?'grey':'rgb(45, 62, 72)'
                 }}
                 size="small"
                 clickable
-                color={selectGenres===genre?'default':'secondary'}
+                color={selectGenres===genre?'white':'secondary'}
 
                 onClick={!selectGenres.includes(genre.id) ? ()=> setSelectGenres((prev) => [...prev, genre.id]):null}
 

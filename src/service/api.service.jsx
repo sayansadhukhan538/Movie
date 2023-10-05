@@ -87,9 +87,25 @@ const filterTv = async (params) => {
     });
   }
 };
-const fetchGenres = async (params) => {
+const fetchMovieGenres = async () => {
   try {
-    const response = await axiosInstances.get(`genre/${params}/list?language=en`, { headers })
+    const response = await axiosInstances.get(`genre/movie/list?language=en`, { headers })
+    return Promise.resolve({
+      isSuccess: true,
+      data: response.data.genres,
+    });
+    
+  } catch (error) {
+    console.log(error);
+    return Promise.resolve({
+      isSuccess: false,
+      data: null,
+    });
+  }
+};
+const fetchTvGenres = async () => {
+  try {
+    const response = await axiosInstances.get(`genre/tv/list?language=en`, { headers })
     return Promise.resolve({
       isSuccess: true,
       data: response.data.genres,
@@ -135,5 +151,40 @@ const fetchDetails = async (params, movie_id) => {
     });
   }
 };
+const fetchCarousel = async (params, movie_id) => {
+  try {
+    const response = await axiosInstances.get(`${params}/${movie_id}/credits`, { headers })
+    return Promise.resolve({
+      isSuccess: true,
+      data: response.data,
+    });
+    
+  } catch (error) {
+    console.log(error);
+    return Promise.resolve({
+      isSuccess: false,
+      data: null,
+    });
+  }
+};
+const fetchTrailer = async (params, movie_id) => {
+  try {
+    const response = await axiosInstances.get(`${params}/${movie_id}/videos`, { headers })
+    return Promise.resolve({
+      isSuccess: true,
+      data: response.data,
+    });
+    
+  } catch (error) {
+    console.log(error);
+    return Promise.resolve({
+      isSuccess: false,
+      data: null,
+    });
+  }
+};
 
-export {fetchMovie, networkCall, fetchTv, fetchGenres, fetchSearch, filterMovie, filterTv, fetchDetails};
+
+
+
+export {fetchMovie, networkCall, fetchTv, fetchMovieGenres, fetchSearch, filterMovie, filterTv, fetchDetails, fetchCarousel, fetchTrailer, fetchTvGenres};

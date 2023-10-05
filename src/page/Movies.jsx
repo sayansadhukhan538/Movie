@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchMovie, filterMovie } from "../service/api.service";
+import { fetchMovie, fetchMovieGenres, filterMovie } from "../service/api.service";
 import MaterialUICard from "../components/Card";
 import Genres from "../components/Genres";
 import useGenres from "../hooks/useGenres";
@@ -26,13 +26,21 @@ const Movies = () => {
             console.log(data)
         }
     }
+    async function getGenre(){
+      const data = await fetchMovieGenres();
+      if(data.isSuccess){
+        setGenres(data.data)
+      }
+    }
     useEffect(()=>{
         if(selectGenres<1){
           getMovie();
         }else{
           getFiltered();
         } 
-    },[genreURL])
+        getGenre();
+        console.log("select genres", selectGenres)
+    },[genreURL, selectGenres])
     
   return (<>
 
@@ -42,7 +50,6 @@ const Movies = () => {
     setSelectGenres={setSelectGenres}
     genres={genres}
     setGenres={setGenres}
-    value={'movie'}
     
     />
     <div className="grid movie" >{data && data.map((element)=>{
@@ -54,7 +61,7 @@ const Movies = () => {
               poster={element.poster_path||element.backdrop_path}
               title={element.title}
               date={element.first_air_date}
-              media_type={element.media_type}
+              media_type='movie'
               vote_average={element.vote_average}
             />
           )

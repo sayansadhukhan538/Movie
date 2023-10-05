@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchTv, filterTv } from "../service/api.service";
+import { fetchTv, fetchTvGenres, filterTv } from "../service/api.service";
 import MaterialUICard from "../components/Card";
 import useGenres from "../hooks/useGenres";
 import Genres from "../components/Genres";
@@ -26,13 +26,21 @@ const Tvseries = () => {
             console.log(data)
         }
     }
+    async function getGenre(){
+      const data = await fetchTvGenres();
+      if(data.isSuccess){
+        setGenres(data.data)
+      }
+    }
     useEffect(()=>{
          if(selectGenres<1){
           fetchSeries();
          }else{
           filterSeries();
          }
-    },[genreURL])
+         getGenre();
+         console.log("select tv genre", selectGenres)
+    },[genreURL, selectGenres])
   return (<>
 
     <h2 className="heading">TV Series</h2>
@@ -52,7 +60,7 @@ const Tvseries = () => {
               poster={element.poster_path||element.backdrop_path}
               title={element.title}
               date={element.first_air_date}
-              media_type={element.media_type}
+              media_type='tv'
               vote_average={element.vote_average}
             />
         )
